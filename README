@@ -1,11 +1,11 @@
 naming convention:
     for each point of the interaction curve, there is a name <name> ending
     with "-<distance>" where <distance> is the inter-fragment distance.
-    this convention is used only by matlab/read_dist.m
+    this convention is used only by matlab/read_geom.m
 
 input files:
     1) geoms folder: geometries as xyz files named <name>.xyz, comment line: 
-       "fragments N1 N2" where Ni are the number of atoms of each fragment
+       "fragments N1 N2" where Ni is the number of atoms of fragment i
     2) cc.data, dft.data: cc and dft energies formatted as "<name> <energy>\n..."
     3) moldens folder: molden files with wavefunctions named <name>.wf
 
@@ -16,7 +16,7 @@ output files:
 static files:
     1) script1.m, script2.m: the actual scripts
     2) dqs.m: file for queueing system used by script1.m
-    3) matlab folder: matlab functions used by script2.m
+    3) matlab folder: matlab functions
     5) param: input file for the dft code used by dqs.m
     6) README: this file
 
@@ -33,3 +33,4 @@ procedure:
        $ octave script2.m
        inputs: cc and dft energies, xyz files, vdw-df contributions
        outputs: vdw-df/cc pair curves
+	   note: can be run also in matlab
