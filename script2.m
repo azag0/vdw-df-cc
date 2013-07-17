@@ -18,7 +18,7 @@ for i = 1:p
     for j = 1:m
         rr(j, :) = geoms(j).distmat(ixi)';
         y(j) = sum(geoms(j).vdws(ixi));
-	end
+    end
     xy = decom(rr, y);
     vdw_curves{i} = xy;
     if i > 1 && xy(1, 1) < vdw_curves{iref}(1, 1)
@@ -38,7 +38,7 @@ for j = 1:m
     rr(j, :) = geoms(j).distmat(:)';
     for k = 1:n
         wr(j, k) = vint(rr(j, k),...
-			            vdw_curves{strcmp(geoms(j).pairs{k}, pairs)})...
+                    vdw_curves{strcmp(geoms(j).pairs{k}, pairs)})...
                    /vint(rr(j, k), vdw_curves{iref});
     end
 end
@@ -50,14 +50,14 @@ corr_curve = decomw(rr, wr, y);
 f = fopen('pair-curves.txt', 'w');
 pair_curves = cell(p, 1);
 for i = 1:p
-	lb = max([vdw_curves{i}(1, 1) corr_curve(1, 1)]);
-	ri = lb:0.1:20;
-	pair_curves{i} = [ri'...
-		vint(ri, corr_curve).*...
-			(vint(ri, vdw_curves{i})./vint(ri, vdw_curves{iref}))];
-	fprintf(f, '%s\n', pairs{i});
-	fprintf(f, '%-10g %g\n', pair_curves{1}');
-	fprintf(f, '\n');
+    lb = max([vdw_curves{i}(1, 1) corr_curve(1, 1)]);
+    ri = lb:0.1:20;
+    pair_curves{i} = [ri'...
+             vint(ri, corr_curve).*...
+               (vint(ri, vdw_curves{i})./vint(ri, vdw_curves{iref}))];
+    fprintf(f, '%s\n', pairs{i});
+    fprintf(f, '%-10g %g\n', pair_curves{1}');
+    fprintf(f, '\n');
 end
 fclose(f);
 
@@ -66,12 +66,12 @@ fclose(f);
 dists = [geoms.dist]';
 energies = [[geoms.cc]' [geoms.dft]'];
 for j = 1:m
-	energies(j, 3) = energies(j, 2) + sum(geoms(j).vdws(:));
-	s = 0;
-	for k = 1:n
-		XY = pair_curves{strcmp(geoms(j).pairs{k}, pairs)};
-		s = s + interp1(XY(:, 1), XY(:, 2), geoms(j).distmat(k));
-	end
-	energies(j, 4) = energies(j, 2) + s;
+    energies(j, 3) = energies(j, 2) + sum(geoms(j).vdws(:));
+    s = 0;
+    for k = 1:n
+        XY = pair_curves{strcmp(geoms(j).pairs{k}, pairs)};
+        s = s + interp1(XY(:, 1), XY(:, 2), geoms(j).distmat(k));
+    end
+    energies(j, 4) = energies(j, 2) + s;
 end
 plot(dists, energies)
