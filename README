@@ -10,6 +10,9 @@ input files:
        ignored by the dft code, but not ignored by the vdw-df-cc code
     2) cc.data, dft.data: cc and dft energies formatted as "<name> <energy>\n..."
     3) moldens folder: molden files with wavefunctions named <name>.wf
+    4) ignore: space-separated list of atom-type pairs (e.g. "H-H H-Si H-O",
+       individual pairs in alphabetical order) which are ignored 
+       in the vdw-df/cc procedure
 
 output files:
     1) vdws folder: run and output folder for script1.m
@@ -33,6 +36,6 @@ procedure:
        uses: dft code
     5) use script2.m:
        $ octave script2.m
-       inputs: cc and dft energies, xyz files, vdw-df contributions
+       inputs: cc and dft energies, xyz files, vdw-df contributions, ignore
        outputs: vdw-df/cc pair curves
-	   note: can be run also in matlab
+       note: can be run also in matlab

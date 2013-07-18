@@ -30,6 +30,7 @@ end
 
 geoms = read_energies(geoms, 'cc.data');
 geoms = read_energies(geoms, 'dft.data');
+ignored = read_ignore('ignore');
 
 n = numel(geoms(1).distmat);
 rr = zeros(m, n);
@@ -43,6 +44,8 @@ for j = 1:m
     end
 end
 y = [geoms.cc]'-[geoms.dft]';
+rr = rr(:, ~ismember(geoms(1).pairs, ignored));
+wr = wr(:, ~ismember(geoms(1).pairs, ignored));
 corr_curve = decomw(rr, wr, y);
 
 % produce and print final pair curves
@@ -50,6 +53,7 @@ corr_curve = decomw(rr, wr, y);
 f = fopen('pair-curves.txt', 'w');
 pair_curves = cell(p, 1);
 for i = 1:p
+    if ismember(pairs{i}, ignored), continue, end
     lb = max([vdw_curves{i}(1, 1) corr_curve(1, 1)]);
     ri = lb:0.1:20;
     pair_curves{i} = [ri'...
@@ -69,6 +73,7 @@ for j = 1:m
     energies(j, 3) = energies(j, 2) + sum(geoms(j).vdws(:));
     s = 0;
     for k = 1:n
+        if ismember(geoms(j).pairs{k}, ignored), continue, end
         XY = pair_curves{strcmp(geoms(j).pairs{k}, pairs)};
         s = s + interp1(XY(:, 1), XY(:, 2), geoms(j).distmat(k));
     end
